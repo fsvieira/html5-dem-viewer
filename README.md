@@ -1,4 +1,14 @@
 html5-dem-viewer
 ================
 
-A HTML5 DEM viewer that include features as 2D/3D color (smooth and flat) by elevation, pallet management, hillshading.
+A Opensource (see file license.txt) HTML5 DEM viewer.
+
+Features:
+   - 2D/3D Visualization.
+   - Ligth map (hillshading) generation. 
+   - Color by elevation, smooth or flat transition suported. 
+   - Pallet Management (create, edit, save (as), delete).
+   - Default Pallets.
+   - Cyclic pallets support.
+ 
+ 
