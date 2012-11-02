@@ -1,0 +1,171 @@
+#content{
+	position: relative; 
+}
+
+.sun {
+	position: absolute; 
+	z-index: 0; 
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+	filter: alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+}
+
+#viewport{
+	position: absolute; 
+	z-index: -1;
+}
+
+input,
+select,
+button {
+	width: 100%;
+}
+
+.text{
+	background-color: white; 
+	/*-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+	filter: alpha(opacity=40);
+	-moz-opacity:0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;*/
+}
+
+#select3d{
+	border: black solid 2px; 
+	height: 512px;
+	width: 512px; 
+	position: absolute; 
+	top:0;
+	left:0;
+	display: none;
+	z-index: 1; 
+}
+
+a:link {
+	text-decoration: none; 
+	color: white; 
+}
+
+a:visited {text-decoration: none; color: red; }
+a:active {text-decoration: none; 'color': blue;}
+a:hover {text-decoration: underline; 'color': green; }
+
+.help {
+	position: relative; 
+	border: solid 2px lightgray; 
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	background-color: black; 
+	color: gray;
+	padding: 10px; 
+	opacity: 0.8;
+}
+
+
+#mapcolor_gui{
+	position: absolute;
+	z-index: 1;
+	border: solid 2px lightgray; 
+	right: 40px; 
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter: alpha(opacity=80);
+	-moz-opacity:0.8;
+	-khtml-opacity: 0.8;
+	opacity: 0.8;
+	background-color: black; 
+	padding: 10px; 
+	color: gray;
+	width: 230px; 
+}
+
+#mapcolor_gui .container {
+	max-height: 700px; 
+	overflow: auto;
+	width: 47%; 
+	float: left; 
+}
+
+
+#apply {
+	clear: both; 
+}
+
+#scale_colors {
+	/* width: 47%; */ 
+	float: left; 
+}
+
+.color {
+	width: 16px;
+	border: 2px solid red;
+}
+
+.elevation {
+	float: right; 
+	width: 100px; 
+}
+
+
+.field {
+	padding: 10px;
+	clear: both; 
+}
+
+.colorpicker {
+	z-index: 2;
+}
+
+.percentage_small {
+	width: 100px; 
+	background-color: lightblue;
+}
+
+
+.percentage_bar {
+	height: 5px; 
+	background-color: blue; 
+	float: right; 
+}
+
+.info {
+	position: absolute; 
+	margin-top: 20px; 
+	padding: 10px; 
+	width: 300px; 
+	height: 300px; 
+	background-color: black; 
+	border: solid 2px lightgray; 
+	color: gray;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+
+.modal {
+	min-height: 200px; 
+}
+
+#not_suported {
+	min-height: 100px;
+}
+/*.modal {
+	position: absolute; 
+	margin-top: 20px; 
+	padding: 10px; 
+	width: 300px; 
+	height: 300px; 
+	background-color: black; 
+	border: solid 2px lightgray; 
+	color: gray;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}*/
+
+#loading {
+	left: 100px; 
+}
+
+

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src='js/jquery-1.7.2.min.js' type='text/javascript' ></script>
+	<link rel="stylesheet" href="css/help.css" type="text/css">
+
+	<script >
+		$(document).ready(function(){
+			$('.expand').hide(); 
+			var titles = $('div.topic'); 
+			titles.each(function(index){
+				var e = $(this).find('.expand'); 
+				$(this).click(
+					function(){
+						$('.expand').hide(); 
+						this.toggle(); 
+					}.bind(e)
+				);  
+			}); 
+		}); 
+	</script>
+
+</head>
+
+<body>
+	<ul>
+		<li><p>Map Viewer</p>
+			<ul>
+				<li>
+					<div class='topic'>
+					<a class='title' href='#'>
+						<img src='css/images/home.png'></img>Home</a>
+						
+						<div class='expand'>
+							Sets view, coordinates and zoom, to default values. 
+						</div>
+					</div>
+				</li>
+				
+				<li>
+					<div class='topic'>
+					<a class='title' href='#'>
+						<img src='css/images/download_list.png'></img>Download Layers</a>
+						<div class='expand'>
+							Show a list of layers to download, including partial download of current visible tiles.  
+							You can also select a specific area to download by using CTRL+LEFT MOUSE CLICK+MOUSE DRAG, 
+							when you release the left mouse button it will show you the possible partial downloads of the selected area. 
+						</div>
+						
+					</div>
+				</li>
+				
+				<li>
+					<div class='topic'>
+					<a class='title' href='#'>
+						Context Menu</a>						
+						<div class='expand'>
+							To open context menu use <b>one right click</b> on the map. 
+							The context menu show a menu of operations to be used in the context of the map view, 
+							such as
+							<ul>
+								<li><b>Center Here</b>, center the map view on selected coordinates.</li>
+								<li><b>Copy Center Coordinates</b>, copy the center coordinates of the current map view.</li>
+								<li><b>Copy Coordinates</b>, copy selected coordinates.</li>
+								<li><b>Download all or visible area</b>, it will show all possible downloads of full areas or visible area.</li>
+								<li><b>View Tile DEM</b>, it will open the current DEM tile for closer visualization and analise.</li>
+								<li><b>View Tile Accuracy</b>, it will open the current accuracy tile for closer visualization and analise.</li>
+							</ul>  
+							    
+						</div>
+					</div>
+				</li>
+				
+				<li>
+					<div class='topic'>
+					<a class='title' href='#'>
+						Zoom</a>						
+						<div class='expand'>
+							There is three ways to zoom:
+							<ul>
+								<li>Using the zoom bar in the left.</li>
+								<li>Using the mouse wheel.</li>
+								<li>Selecting a area to zoom using SHIFT+LEFT MOUSE CLICK+MOUSE DRAG</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+				
+			</ul>
+		</li>
+		<li id='terrain_viewer'><p>Terrain Viewer</p>
+			<ul>
+			
+			<li><div class='topic' >
+					<a class='title' href='#' >Common problems and solutions.</a>
+					<div class='expand'>
+						The Map Viewer uses the latest web technology (html5) witch is supported in most modern web browsers.
+						If you have problems try this tips: 
+						
+						<ul>
+							<li>
+								<div>
+									<h3>Update your browser to the latest version.</h3>
+									<div>
+										Most modern browsers support html5, so updating the browser will probably solve the problem. 
+									</div>
+								</div>
+								</li>
+								
+							<li>
+								<div>
+									<h3>Activate web gl in your browser.</h3>
+									<div class='expand'>
+										In most browsers web gl is activated by default, but some needs to be user activated. 
+										Choose your browser and follow the instructions. 
+										
+										<p><u>Safari</u></p>
+										<ol>
+											<li>In Safari, open the Safari menu and select Preferences.</li>
+											<li>Click the Advanced tab in the Preferences window.</li>
+											<li>At the bottom of the window, check the Show Develop menu in menu bar checkbox.</li>
+											<li>Then, open the Develop menu in the menu bar and select Enable WebGL.</li>
+										</ol>
+										<br>
+									</div>
+								</div>
+							</li>
+							
+							<li><div>
+								<h3>Performance issues</h3>
+								<div>
+									Performance may be affected by slow hardware or bad system configuration (bad drivers and 3D support) its also affected by how fast your browser is in your system  
+									so we recommend to try a recommended browser. 
+								</div>
+								</div>
+							</li>
+							
+							<li><div >
+								<h3>Install/Update to a recommend browser Chromium, Chrome or Firefox.</h3>
+								<div >
+									The easy solution is to install one of the recommend and tested browsers, available in most popular platforms
+									<a target='_blank' href='http://www.chromium.org'>Chromium</a>, 
+									<a target='_blank' href='http://www.google.com/chrome/'>Chrome</a> or
+									<a target='_blank' href='http://www.mozilla.org'>Firefox</a>
+								</div>
+							</div></li>
+							
+							
+						</ul>
+						
+					</div>
+					
+				</div>	
+			</li>	
+				
+			<li><div class='topic' >
+					<a class='title' href='#' >Camera Controls</a>
+					<div class='expand'>
+						The camera angle is controlled by dragging the mouse (hold left button while moving the mouse) and camera position
+						by the arrow keys or A, W, S, D. 
+					<div>
+				</div>	
+			</li>
+			
+			<li><div class='topic' >
+					<a class='title' href='#' >Flat render</a>
+					<div class='expand'>
+						When active the pallet is generated with solid colors instead of smooth color transitions. 
+					<div>
+				</div>	
+			</li>
+			
+			<li><div class='topic' >
+					<a class='title' href='#' >Pallets</a>
+					<div class='expand'>
+						The pallets associates colors by elevation, you can create, edit, save and delete a pallet. 
+						When you save a pallet it will be stored in the browser, so if you change to a different browser it will not 
+						show your saved pallets. 
+						All pallets can be deleted but default pallets will always be available when you restart.
+						To changes take effect you need to apply or save (as) the pallet. 
+					<div>
+				</div>	
+			</li>
+			
+			<li><div class='topic' >
+					<a class='title' href='#' >Sun</a>
+					<div class='expand'>
+						This options generates a light map, by default the viewer starts with no light map. 
+						To generate a light map choose the angle X and Y of light source and the opacity (0-100).
+						Angles just take effect when you "apply angles", opacity takes immediately effect on value change.
+						The light source vector starts as (0,0,-1) meaning all light rays are perpendicular to the map, changing
+						X and Y angles rotates the light source vector on plane X and Y. 
+					<div>
+				</div>	
+			</li>
+			
+			<li><div class='topic' >
+					<a class='title' href='#' >2D/3D Mode</a>
+					<div class='expand'>
+						When switching to 3D mode, a small box will appear in the image map just position the box in the area to be generated as 3D, when ready just 
+						click on left mouse button to start the 3D generation. 
+					<div>
+				</div>	
+			</li>
+			
+			</ul>
+		</li>	
+	</ul>
+	
+	
+	
+	
+</body>
