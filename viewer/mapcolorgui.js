@@ -211,8 +211,8 @@ function MapColorGUI(mapcolor, ctx){
 		var j=0; 
 		var color = colors[j]; 
 		var px = 0; 
-		
-		var min = 0; 
+
+		var min = colors[0].elevation; 
 		var max = colors[colors.length-1].elevation; 
 		var range = max - min;
 		var step = range/(sh-10); 
