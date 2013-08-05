@@ -280,8 +280,10 @@ function MapColor(img){
 		// Do points 
 		var i=0; 
 		
-		for(var x=0; x < w; x++){		
-			for(var y=0; y < h; y++){
+		//PLG change order of loops here, to correctly orient DEM
+		for(var y=0; y < h; y++){
+		   for(var x=0; x < w; x++){		
+			
 				var offset = (y*w+x)*4;
 				var r = pix[offset+0];
 				var g = pix[offset+1];
