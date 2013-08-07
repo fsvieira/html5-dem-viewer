@@ -7,13 +7,12 @@ function View3D(mapcolor, area) {
 	this.scene;
 	this.renderer;
 	this.controls; 
-    this.geometry;
-    this.material; 
-    this.points; 
-    this.viewport;
-    this.mesh; 
-    
-    this.area = area;
+  this.geometry;
+  this.material; 
+  this.points; 
+  this.viewport;
+  this.mesh; 
+  this.area = area;
     
 	var w = window.innerWidth-20; 
 	var h = window.innerHeight-20;
@@ -25,49 +24,30 @@ function View3D(mapcolor, area) {
 
     this.scene = new THREE.Scene();
 
-	//camera attributes
-    /*this.camera = new THREE.OrthographicCamera( w / - 2, w / 2, h / 2, h / - 2, 1, 10000 ); 
-    
-    this.camera.position.z = 700;
-    this.camera.position.y = h/2;*/
-    
-    // this.camera.lookAt(this.scene);             
-    this.fov = 50;
+	
+  this.fov = 50;
 	this.aspect = w/h;
 	this.near = 1;
 	this.far = 100000;
+	
 	this.camera = new THREE.PerspectiveCamera(
-	  this.fov,
-	  this.aspect,
-	  this.near,
-	  this.far
+		this.fov,
+		this.aspect,
+		this.near,
+		this.far
 	);
-    
-    // this.camera.position.y = window.innerHeight; 
-    // this.camera.position.z =  100; // (this.mapcolor.img.height*10); 
-                
-    this.scene.add( this.camera );
 
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setSize(w, h);
+  this.scene.add( this.camera );
 
-	/*this.controls = new THREE.TrackballControls(this.camera, this.renderer.domElement);
-
-	this.controls.dragToLook = true;
-	this.controls.autoForward = false;*/
-	
-	
+  this.renderer = new THREE.WebGLRenderer();
+  this.renderer.setSize(w, h);
 
 	this.viewport.appendChild(this.renderer.domElement);
-
-	// this.scene.add(this.mapcolor.mesh); 
-
 
 	this.controls = new THREE.FirstPersonNavigationControls(
 		this.camera,
 		this.renderer.domElement
 	);
-
 
 	this.paintFaces = function(){
 		var faceIndices = [ 'a', 'b', 'c', 'd' ];
@@ -109,7 +89,7 @@ function View3D(mapcolor, area) {
 			
 			for(x=this.area.ax; x<=this.area.bx; x++){
 				for(y=this.area.ay; y<=this.area.by; y++){
-					i = x*(img.width)+y; 
+					i = x*(this.mapcolor.raster.data.w)+y; 
 					this.terrain.vertices[a].y = this.mapcolor.elevations[i]*10; 
 					a++; 
 				}

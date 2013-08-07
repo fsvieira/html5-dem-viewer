@@ -61,8 +61,8 @@ function Sun(mapcolor){
 	
 	this.calcLightMap = function(){
 		this.rotate(); 
-		var w = this.mapcolor.img.width; 
-		var h = this.mapcolor.img.height; 
+		var w = this.mapcolor.raster.data.w; 
+		var h = this.mapcolor.raster.data.h; 
 
 		this.canvas.width = w; 
 		this.canvas.height = h; 

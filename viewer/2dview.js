@@ -45,19 +45,11 @@ function View2D(mapcolor){
 	
 	$("#viewport").width(w); 
 	$("#viewport").height(h); 
-	
-	
-    
-    
     
     this.setWH = function(w, h){
 		this.canvas.width = w;
 		this.canvas.height = h;
 	}; 
-	
-	/*this.setElevation = function(i, elevation){
-		this.elevation[i] = elevation; 
-	};*/  
 	
 	this.paint = function(){
 		var canvas_data = this.canvas_ctx.getImageData(0,0, this.canvas.width, this.canvas.height); 

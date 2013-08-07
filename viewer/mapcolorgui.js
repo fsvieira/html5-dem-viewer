@@ -15,18 +15,14 @@ function MapColorGUI(mapcolor, ctx){
 	this.x = 0; 
 	this.y = 0; 
 	
-	$('#e_max').html(this.mapcolor.stats.max); 
-	$('#e_min').html(this.mapcolor.stats.min); 
+	$('#e_max').html(this.mapcolor.raster.max); 
+	$('#e_min').html(this.mapcolor.raster.min); 
 
 	if(this.mapcolor.flat){
 		$('#flat').prop('checked', true);
 	}else{
 		$('#flat').prop('checked', false);
 	}
-	
-	
-	// $('#show_sun').prop('checked', false);
-	
 		
 	$('#apply_angles').click(
 		function(){
