@@ -208,15 +208,15 @@ function MapColor(raster){
 	this.gen_pallet = function(){
 		this.colors = [];
 
-		var min = this.stats.min;
-		var max = this.stats.max;
+		var min = this.raster.min;
+		var max = this.raster.max;
 		var range = max - min;
 		var colors = parseInt($('#colors').val())-1;
 
 		var step = Math.ceil(range/colors);
 
-		this.setElevationColor(this.stats.min, 0x0);
-		this.setElevationColor(this.stats.max, 0xffffff);
+		this.setElevationColor(this.raster.min, 0x0);
+		this.setElevationColor(this.raster.max, 0xffffff);
 
 		if(colors > 1){
 			for(var i=min+step; i<max; i+=step){

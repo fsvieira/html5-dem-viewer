@@ -15,7 +15,8 @@
 <script type="text/javascript" src="js/jquery.simplemodal.1.4.2.min.js"></script>
 <link type='text/css' href='style/basic.css' rel='stylesheet' media='screen' />
 
-<script src='ThreeDebug.js' type='text/javascript' ></script>
+<script src='Three.js' type='text/javascript' ></script>
+
 <script src='FirstPersonNavigationControls.js' type='text/javascript' ></script>
 
 <script src='sun.js' type='text/javascript' ></script>
@@ -75,10 +76,9 @@
 				   
 				   mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
 				   mapcolorgui.render();
-				},
-				function (err) {
+				}, function (err) {
 					alert(err);
-				} ,'json.gz');
+				}, 'json.gz');
 			}else{
 				$('#not_suported').modal(); 
 			}
