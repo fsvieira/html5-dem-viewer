@@ -106,7 +106,7 @@ int main(int argc, char *argv[]){
 		 json.close();
 		 GDALClose(poDataset);
 
-		 std::string cmd = "gzip " + destName;
+		 std::string cmd = "bzip2 " + destName;
 		 system(cmd.c_str());
 	}
     
