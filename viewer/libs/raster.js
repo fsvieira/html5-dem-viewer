@@ -34,7 +34,6 @@ Raster.load = function(url, onload, onerror, type) {
 			var bytes = new Uint8Array(xhr.response);
 				try {
 					var data = bzip2.simple(bzip2.array(bytes));
-					alert(data);
 					var raster = new Raster(JSON.parse(data));
 				}
 				catch (exception) {
