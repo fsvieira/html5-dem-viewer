@@ -28,7 +28,6 @@
 <script src='mapcolorgui.js' type='text/javascript' ></script>
 
 <script src='js/jquery.base64.min.js' type='text/javascript' ></script>
-<!-- <script src='libs/gzip.js' type='text/javascript' ></script> -->
 <script src='libs/bzip2.js' type='text/javascript' ></script>
 
 
@@ -62,26 +61,28 @@
 	}
 	
 	$(document).ready(
-	  function(){
+	  function () {
 		  $('#content').hide(); 
 		  if(isCanvasSupported()) {
-				Raster.load('utm.json.bz2', function (raster) {
-					mapcolor = new MapColor(raster);
-					mapcolor.setMode2D(true);
-					renderMode();
+				Raster.load_png ('dv.png',
+					function (raster) {
+						mapcolor = new MapColor(raster);
+						mapcolor.setMode2D(true);
+						renderMode();
 
-					$('#mode').click(function(){ 
-					   mapcolor.toggleMode();
-				   }); 
+						$('#mode').click(function(){ 
+							 mapcolor.toggleMode();
+						}); 
 
-				   $('#loading').hide(); 
-				   $('#content').show(); 
-				   
-				   mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
-				   mapcolorgui.render();
-				}, function (err) {
-					alert(err);
-				}, 'json.bz2');
+						$('#loading').hide(); 
+						$('#content').show(); 
+								 
+						mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
+						mapcolorgui.render();
+					}, function (err) {
+						alert(err);
+					}
+				);
 			}else{
 				$('#not_suported').modal(); 
 			}

@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
 	   std::cout << "Failed to open " << name << "\n"; 
 	}else{
 		
-		const char *pszFormat =  "GTiff";
+		const char *pszFormat = "GTiff";
 		GDALDriver *poDriver;
 		char **papszMetadata;
 
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]){
        std::map<float, unsigned int> counter;  
        for(i=0; i<size; i++){
 			counter[buffer[i]]++;
-			unsigned int v = buffer[i]*1000;   
+			unsigned int v = buffer[i]; // TODO: check if files can be enconded by * 1000;   
 	  	    destWrite1[i] = (v & (0xff << 0)) >> 0;
 	  	    destWrite2[i] = (v & (0xff << 8)) >> 8;
 	  	    destWrite3[i] = (v & (0xff << 16)) >> 16;
