@@ -122,14 +122,12 @@ int main(int argc, char *argv[]){
        std::cout << "range=" << range << ", max=" << max << ", min=" << min << "\n";  
        std::map<float, unsigned int> counter;  
        for(i=0; i<size; i++){
-			counter[buffer[i]]++;
-			unsigned int v = buffer[i]; // TODO: check if files can be enconded by * 1000;   
-	  	    destWrite1[i] = (v & (0xff << 0)) >> 0;
-	  	    destWrite2[i] = (v & (0xff << 8)) >> 8;
-	  	    destWrite3[i] = (v & (0xff << 16)) >> 16;
+			 counter[buffer[i]]++;
+			 unsigned int v = buffer[i] * 100;
+	  	 destWrite1[i] = (v & (0xff << 0)) >> 0;
+	  	 destWrite2[i] = (v & (0xff << 8)) >> 8;
+	  	 destWrite3[i] = (v & (0xff << 16)) >> 16;
 	  	   //  destWrite4[i] =  0x00; // (v & (0xff << 24)) >> 24;
-
-	  	    
 	   }
 
        destBand1->RasterIO( GF_Write, 0, 0, data->GetXSize(), data->GetYSize(), 
