@@ -14,20 +14,32 @@ function View2D(mapcolor){
 	$('#viewport').mousemove(function(e){
 		var x = (e.pageX - Math.floor($('#select3d').width()/2) ); 
 		var y = (e.pageY - Math.floor($('#select3d').height()/2) );
-
+		var w = this.canvas.width;
+		var h = this.canvas.height;
+		
 		if(x < 0){x = 0;}
 		if(y < 0){y = 0;}
+
 		
-		if((x + $('#select3d').width()) > this.canvas.width){
+		
+		if((x + $('#select3d').width()) > w){
 			x = this.canvas.width - $('#select3d').width(); 
 		}
 		
-		if((y + $('#select3d').height()) > this.canvas.height ){
+		if((y + $('#select3d').height()) > h ){
 			y = this.canvas.height - $('#select3d').height(); 
 		}
 
 		this.x = x; 
 		this.y = y; 
+
+		var location_x = e.pageX - $("#viewport").offset().left;
+		var location_y = e.pageY - $("#viewport").offset().top;
+
+		if ( (location_x < w) && (location_y < h) ) {
+			$("#location_x").html(location_x);
+			$("#location_y").html(location_y);
+		}
 		
 		$('#select3d').css({'left': x, 'top': y}); 
 	}.bind(this)); 
