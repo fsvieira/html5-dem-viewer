@@ -106,7 +106,7 @@ function View3D(mapcolor, area) {
 	    
 	    var l = Math.floor(this.terrain.vertices.length/2);
 	    var v = this.terrain.vertices[l]; 
-	    this.camera.position.y = v.y+100; // window.innerHeight; 
+	    this.camera.position.y = v.y + 100; // window.innerHeight; 
 	    this.camera.position.x = v.x; 
 	    this.camera.position.z = v.z; 
 	}; 

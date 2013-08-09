@@ -64,27 +64,7 @@
 	  function () {
 		  $('#content').hide(); 
 		  if(isCanvasSupported()) {
-				/*Raster.load_png ('dv.png',
-					function (raster) {
-						mapcolor = new MapColor(raster);
-						mapcolor.setMode2D(true);
-						renderMode();
-
-						$('#mode').click(function(){ 
-							 mapcolor.toggleMode();
-						}); 
-
-						$('#loading').hide(); 
-						$('#content').show(); 
-								 
-						mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
-						mapcolorgui.render();
-					}, function (err) {
-						alert(err);
-					},
-					100
-				);*/
-
+				
 				function load_raster (raster) {
 					mapcolor = new MapColor(raster);
 						mapcolor.setMode2D(true);
@@ -104,9 +84,11 @@
 				function error (err) {
 					alert(err);
 				};
+
+				// Raster.load_png ('dv.png', load_raster,	error, 100);
 				
 				downloadFile(
-					'utm.json.bz2',
+					'N36W117.json.bz2',
 					function (bytes) {
 						Raster.load_json_bz2 (bytes, load_raster,	error);
 					}

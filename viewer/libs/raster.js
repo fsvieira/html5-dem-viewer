@@ -30,7 +30,8 @@ function downloadFile (url, onload) {
 	xhr.send();
 
 	xhr.onload = function () {
-		onload(xhr.response);
+		var bytes = new Uint8Array(xhr.response);
+		onload(bytes);
 	}
 };
 
