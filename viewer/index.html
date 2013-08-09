@@ -64,7 +64,7 @@
 	  function () {
 		  $('#content').hide(); 
 		  if(isCanvasSupported()) {
-				Raster.load_png ('dv.png',
+				/*Raster.load_png ('dv.png',
 					function (raster) {
 						mapcolor = new MapColor(raster);
 						mapcolor.setMode2D(true);
@@ -83,7 +83,35 @@
 						alert(err);
 					},
 					100
+				);*/
+
+				function load_raster (raster) {
+					mapcolor = new MapColor(raster);
+						mapcolor.setMode2D(true);
+						renderMode();
+
+						$('#mode').click(function(){ 
+							 mapcolor.toggleMode();
+						}); 
+
+						$('#loading').hide(); 
+						$('#content').show(); 
+								 
+						mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
+						mapcolorgui.render();
+				};
+
+				function error (err) {
+					alert(err);
+				};
+				
+				downloadFile(
+					'utm.json.bz2',
+					function (bytes) {
+						Raster.load_json_bz2 (bytes, load_raster,	error);
+					}
 				);
+				
 			}else{
 				$('#not_suported').modal(); 
 			}

@@ -34,7 +34,7 @@ function downloadFile (url, onload) {
 	}
 };
 
-Raster.load_json_bz2 = function(bytes, onload, onerror) {
+Raster.load_json_bz2 = function (bytes, onload, onerror) {
 	try {
 		var data = bzip2.simple(bzip2.array(bytes));
 		var raster = new Raster(JSON.parse(data));
