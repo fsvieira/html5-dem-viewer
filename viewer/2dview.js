@@ -67,12 +67,20 @@ function View2D(mapcolor){
 		var canvas_data = this.canvas_ctx.getImageData(0,0, this.canvas.width, this.canvas.height); 
 		var data = canvas_data.data; 
 		for(i in this.mapcolor.elevations){
-			var offset = i*4; 
-			var color = this.mapcolor.getElevationColor(Math.abs(this.mapcolor.elevations[i]));
-			data[offset+0] = Math.floor(color.r*255); 
-			data[offset+1] = Math.floor(color.g*255); 
-			data[offset+2] = Math.floor(color.b*255); 
-			data[offset+3] = 255; 
+			var offset = i*4;
+			if (this.mapcolor.elevations[i] !== null) {
+				var color = this.mapcolor.getElevationColor(Math.abs(this.mapcolor.elevations[i]));
+				data[offset+0] = Math.floor(color.r*255); 
+				data[offset+1] = Math.floor(color.g*255); 
+				data[offset+2] = Math.floor(color.b*255); 
+				data[offset+3] = 255;
+			}
+			else {
+				data[offset+0] = 0; 
+				data[offset+1] = 0; 
+				data[offset+2] = 0; 
+				data[offset+3] = 0;
+			}
 		}
 		
 		this.canvas_ctx.putImageData(canvas_data, 0, 0); 

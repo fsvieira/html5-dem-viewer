@@ -83,14 +83,14 @@ function Sun(mapcolor){
 					p0.set(-1,y,0);
 				}else{
 					o = (x-1)+y*w; 
-					p0.set(x-1, y, elevations[o]); 
+					p0.set(x-1, y, elevations[o] || 0); 
 				}	
 
 				if(y==0){
 					p1.set(x,-1,0);
 				}else{
 					o = x+(y-1)*w; 
-					p1.set(x, y-1, elevations[o]); 
+					p1.set(x, y-1, elevations[o] || 0); 
 				}	
 				
 				// w h				
@@ -98,26 +98,34 @@ function Sun(mapcolor){
 					p2.set(w,y,0);
 				}else{
 					o = (x+1)+y*w; 
-					p2.set(x+1, y, elevations[o]); 
+					p2.set(x+1, y, elevations[o] || 0); 
 				}	
 
 				if(y==(h-1)){
 					p3.set(x,h,0);
 				}else{
 					o = x+(y+1)*w; 
-					p3.set(x, y+1, elevations[o]); 
+					p3.set(x, y+1, elevations[o] || 0); 
 				}	
 				
 				o = x+y*w; 
-				c0.set(x, y, elevations[o]); 
+				c0.set(x, y, elevations[o] || 0); 
 				l = this.getLight(c0, p0, p1, p2, p3); 
 				l = Math.ceil((l+1)*255/2); 
 				o = o*4; 
-				// l=0; 
-				data[o]   = l;    // red
-				data[++o] = l;    // green
-				data[++o] = l;    // blue
-				data[++o] = 255;      // alpha
+				
+				if (elevations[o] !== null) {
+					data[o]   = l;    // red
+					data[++o] = l;    // green
+					data[++o] = l;    // blue
+					data[++o] = 255;      // alpha
+				}
+				else {
+					data[o]   = 0;    // red
+					data[++o] = 0;    // green
+					data[++o] = 0;    // blue
+					data[++o] = 0;      // alpha
+				}
 			}
 		} 
 		

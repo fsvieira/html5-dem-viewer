@@ -2,25 +2,29 @@ function Raster (data) {
 	this.data = data;
 
 	this.computeStats = function () {
+
+		if (this.data.minz !== undefined && this.data.max !== undefined) return;
+		
 		var values = data.data;
 
 		for (var i in values) {
-			if (!this.min) {
-				this.min = values[i];
+			if (!this.data.minz) {
+				this.data.minz = values[i];
 			}
-			else if (this.min > values[i]) {
-				this.min = values[i];
+			else if (this.data.minz > values[i]) {
+				this.data.minz = values[i];
 			}
 
-			if (!this.max) {
-				this.max = values[i];
-			} else if (this.max < values[i]) {
-				this.max = values[i];
+			if (!this.data.maxz) {
+				this.data.maxz = values[i];
+			} else if (this.data.maxz < values[i]) {
+				this.data.maxz = values[i];
 			}
 		}
 	};
 
 	this.computeStats();
+	
 }
 
 function downloadFile (url, onload) {

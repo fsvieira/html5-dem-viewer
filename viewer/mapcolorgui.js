@@ -15,8 +15,8 @@ function MapColorGUI(mapcolor, ctx){
 	this.x = 0;
 	this.y = 0;
 
-	$('#e_max').html(this.mapcolor.raster.max);
-	$('#e_min').html(this.mapcolor.raster.min);
+	$('#e_max').html(this.mapcolor.raster.data.maxz);
+	$('#e_min').html(this.mapcolor.raster.data.minz);
 
 	if(this.mapcolor.flat){
 		$('#flat').prop('checked', true);
