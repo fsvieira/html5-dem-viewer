@@ -20,7 +20,7 @@ function MapPallet(name, colors){
 	this.colors = colors ? colors : [];
 };
 
-function MapColor(raster){
+function MapColor(raster,DispMode){
 
 	this.colors = [];
 	this.pallets = [];
@@ -30,7 +30,7 @@ function MapColor(raster){
 
 	this.view = null;
 	this.sun = null;
-
+    this.DispMode = DispMode;
 
 	this.elevations = raster.data.data;
 	this.mode_area = false;
@@ -190,8 +190,8 @@ function MapColor(raster){
 		var c_r = c_min.r + vr*e,
 			c_g = c_min.g + vg*e,
 			c_b = c_min.b + vb*e;
-
-
+         
+  
 		return new THREE.Color().setRGB(c_r, c_g, c_b);
 
 

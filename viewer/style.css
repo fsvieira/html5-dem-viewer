@@ -1,4 +1,4 @@
-#content{
+﻿#content{
 	position: relative; 
 }
 
@@ -17,11 +17,16 @@
 	z-index: -1;
 }
 
+
+
+/*
+PLG change  8/24/2013 so controls take up less space
 input,
 select,
 button {
 	width: 100%;
 }
+*/
 
 .text{
 	background-color: white; 
@@ -52,8 +57,8 @@ a:visited {text-decoration: none; color: red; }
 a:active {text-decoration: none; 'color': blue;}
 a:hover {text-decoration: underline; 'color': green; }
 
+
 .help {
-	position: relative; 
 	border: solid 2px lightgray; 
 	-moz-border-radius: 15px;
 	border-radius: 15px;
@@ -61,6 +66,7 @@ a:hover {text-decoration: underline; 'color': green; }
 	color: gray;
 	padding: 10px; 
 	opacity: 0.8;
+	position:fixed; bottom:1%; left:1%; 
 }
 
 
@@ -68,7 +74,7 @@ a:hover {text-decoration: underline; 'color': green; }
 	position: absolute;
 	z-index: 1;
 	border: solid 2px lightgray; 
-	right: 40px; 
+	right: 10px; 
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
@@ -83,6 +89,7 @@ a:hover {text-decoration: underline; 'color': green; }
 }
 
 #mapcolor_gui .container {
+    position: absolute;
 	max-height: 700px; 
 	overflow: auto;
 	width: 47%; 
@@ -106,7 +113,7 @@ a:hover {text-decoration: underline; 'color': green; }
 
 .elevation {
 	float: right; 
-	width: 100px; 
+	width: 200px; 
 }
 
 
@@ -136,7 +143,7 @@ a:hover {text-decoration: underline; 'color': green; }
 	margin-top: 20px; 
 	padding: 10px; 
 	width: 300px; 
-	height: 300px; 
+	height: 140px; 
 	background-color: black; 
 	border: solid 2px lightgray; 
 	color: gray;
@@ -165,7 +172,8 @@ a:hover {text-decoration: underline; 'color': green; }
 }*/
 
 #loading {
-	left: 100px; 
+	position:fixed; top:1%; left:1%; 
+	height: 50px; 
 }
 
 

@@ -2,22 +2,24 @@
 <html>
 
 <head>
+    <Title>DEM view v0.106</Title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	
 <link href="style.css" rel="stylesheet" type="text/css"  >
 
 
-<script src='js/jquery-1.7.2.min.js' type='text/javascript' ></script>
+<script type='text/javascript' src='js/jquery-1.7.2.min.js'  ></script>
+<script type="text/javascript" src="js/jquery.simplemodal.1.4.2.min.js"></script>
+<script type='text/javascript' src='js/jquery.base64.min.js' ></script>
+
 <script type="text/javascript" src="minicolors/jquery.miniColors.js"></script>
 <link type="text/css" rel="stylesheet" href="minicolors/jquery.miniColors.css" />
 
 
-<script type="text/javascript" src="js/jquery.simplemodal.1.4.2.min.js"></script>
 <link type='text/css' href='style/basic.css' rel='stylesheet' media='screen' />
 
-<script src='Three.js' type='text/javascript' ></script>
-
-<script src='FirstPersonNavigationControls.js' type='text/javascript' ></script>
+<script type='text/javascript' src='Three.js' ></script>
+<script type='text/javascript' src='FirstPersonNavigationControls.js' ></script>
 
 <script src='sun.js' type='text/javascript' ></script>
 
@@ -27,23 +29,36 @@
 <script src='mapcolor.js' type='text/javascript' ></script>
 <script src='mapcolorgui.js' type='text/javascript' ></script>
 
-<script src='js/jquery.base64.min.js' type='text/javascript' ></script>
 <script src='libs/bzip2.js' type='text/javascript' ></script>
-
 
 <script src='libs/raster.js' type='text/javascript' ></script>
 
 <script type='text/javascript' >
+
+//plg changes 8/25/2013
+//    moved code to load DEM out of document.ready, so it can be called with buttons
+//    put DEM loading buttons on bottom of screen (they need to be made smaller)
+//    added HTML title with version (which at this point just insures that I remember to save edits)
+//two new color modes
+//shortened many of the prompts, so they take up less screen space on a handheld
+//got the coordinates to display as you roam
+//interface very much in transition--need to hide palette manipulation, and make sun angle more readily visible
+//need to enable finger motions for handheld
+
 	
 	var mapcolor;  
 	var mapcolorgui; 
 	var img; 
+	var DispMode=1;
+	var fName; 
 		
 	function renderMode(mode){
 		if(mapcolor.mode_2d){
 		   $('#mode').html('Switch to 3D Mode');
 		}else{
 		   $('#mode').html('Switch to 2D Mode');
+		   $("#location_x").html('');
+		   $("#location_y").html('');
 		}
 	}; 
 	
@@ -60,41 +75,46 @@
 		return vars;
 	}
 	
-	$(document).ready(
-	  function () {
-		  $('#content').hide(); 
-		  if(isCanvasSupported()) {
-				
-				function load_raster (raster) {
-					mapcolor = new MapColor(raster);
-						mapcolor.setMode2D(true);
-						renderMode();
+	function error (err) {
+		alert(err);
+	};
+	
+	
+	function load_raster (raster) {
+		mapcolor = new MapColor(raster,DispMode);
+			mapcolor.setMode2D(true);
+			renderMode();
 
-						$('#mode').click(function(){ 
-							 mapcolor.toggleMode();
-						}); 
+			$('#mode').click(function(){ 
+				 mapcolor.toggleMode();
+			}); 
 
-						$('#loading').hide(); 
-						$('#content').show(); 
-								 
-						mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
-						mapcolorgui.render();
-				};
+			$('#loading').hide(); 
+			$('#content').show(); 
+					 
+			mapcolorgui = new MapColorGUI(mapcolor, $('#mapcolor_gui'));
+			mapcolorgui.render();
+	};
 
-				function error (err) {
-					alert(err);
-				};
-
-				// Raster.load_png ('dv.png', load_raster,	error, 100);
-				
-				downloadFile(
-					'N36W117.json.bz2',
+	
+	function OpenDEM(fName){
+	        $('#loading').show(); 
+	        downloadFile(fName,
 					function (bytes) {
 						Raster.load_json_bz2 (bytes, load_raster,	error);
 					}
 				);
-				
-			}else{
+	}			
+	
+	$(document).ready(
+	  function () {
+		  $('#content').hide();
+          $('#loading').hide(); 		  
+		  if(isCanvasSupported()) {
+		     fName = 'duck.json.bz2';
+             OpenDEM(fName); 
+		}
+		else{
 				$('#not_suported').modal(); 
 			}
 		}
@@ -106,21 +126,6 @@
 </head>
 
 <body>
-<div class='help' >If you are having problems seeing or intereacting with this page please consult the <a target='_blank' href='help.html'>help page</a>.</div>
-
-<div id='loading'  class='info' >
-			<p style='color:red'>Loading... Please be patiant, this may take a while.</p>
-			<p>3D Mode:</p>
-			<ul>
-				<li>Use mouse to change angle, and arrow keys or W,A,S,D to navigate.</li>
-			</ul>
-</div>
-
-<div id='not_suported'  style='display: none' >
-	<p>We are sorry but this feature is not supported by your browser please 
-	  try our <a target='_blank' href='../maps/help.html#terrain_viewer'>help</a> page to solve the problem. 
-	</p>
-</div>
 
 
 
@@ -131,8 +136,8 @@
 	<div>
 		<div id='save_pallet_modal'>
 			<fieldset >
-				<legend>Save Pallet</legend>
-				Please insert a name that identify this pallet: 
+				<legend>Save Palette</legend>
+				Insert name to identify palette: 
 				<p>
 				<input type='text' id='pallet_name' value='my pallet' >
 				<button id='save_pallet' >Save</button> 
@@ -147,20 +152,23 @@
 </div>
 
 <div id='mapcolor_gui'>
-	<fieldset>
-		<legend>Elevation</legend>
-		<div style='float:left;'>x</div><div style='float:right;' id='location_x'></div><br>
-		<div style='float:left;' >y</div><div style='float:right;' id='location_y'></div>
-	</fieldset>
+    <fieldset>
+		<legend>Location</legend>
+		<!-- x:<div id='location_x'></div> -->utm_x:<div id='utm_x'></div><br>
+		<!-- y:<div id='location_y'></div>-->utm_y:<div id='utm_y'></div><br>
+		<!-- z:<div id='location_z'></div>-->elev_z:<div id='elev_z'></div><br>
+	</fieldset>	
 	<button id='mode'></button>
 	<p>Flat Render<input type='checkbox' id='flat' /></p>
+	
 	<fieldset>
-		<legend>Elevation</legend>
+		<legend>Elevation Range</legend>
 		<div style='float:left;'>max</div><div style='float:right;' id='e_max'></div><br>
 		<div style='float:left;' >min</div><div style='float:right;' id='e_min'></div>
 	</fieldset>
+	
 	<fieldset>
-		<legend>Pallet</legend>
+		<legend>Palette</legend>
 	<select id='pallets'></select>
 	<p>Number of colors: <input id='colors' type='text' value='2' style='width: 50px;'/></p> 
 	<div class='container'></div>
@@ -175,12 +183,11 @@
 	
 	<fieldset>
 		<legend>Sun</legend>
-		<p>X angle <input type='number' id='x_angle' value='0' /></p>
-		<p>Y angle <input type='number' id='y_angle' value='0' /></p>
+		<p>X angle <input type='number' id='x_angle' value='0' ></input></p>
+		<p>Y angle <input type='number' id='y_angle' value='0' ></input></p>
 		
 		<button id='apply_angles'>Apply Angles</button>
-		<p>Opacity <input id='sun_alpha' /></p>
-		<!-- <p>Show <input type='checkbox' id='show_sun'/></p> -->
+		<p>Opacity <input id='sun_alpha' ></input></p>
 	</fieldset>
 </div>
 <div id="viewport"></div>
@@ -188,6 +195,27 @@
 
 </div>
 
+<div class='help'>
+<form name="vert_exag">
+    Display<input type="radio" name="display" id="terrain" onclick='DispMode=1; OpenDEM(fName);' checked="checked"></input>Terrain
+	<input type="radio" name="display" id="gold" onclick='DispMode=2; OpenDEM(fName);' ></input>Gold
+    <input type="radio" name="display" id="defined" onclick='DispMode=3; OpenDEM(fName);'></input>Defined
+</form>  
+ 	
+   <input value="Death Valley" onclick="fName = 'dv_utm.json.bz2'; OpenDEM(fName); " type="button" ></input>
+   <input value="Duck" onclick="fName = 'duck.json.bz2'; OpenDEM(fName);"  type="button" ></input>
+   <input value="California" onclick="fName = 'ca_utm.json.bz2'; OpenDEM(fName);" type="button" ></input>
+     Problems consult <a target='_blank' href='help.html'>help page</a>.
+</div>
+
+<div id='loading'  class='info' >
+			<p style='color:red'>Loading... Patience, may take a while.</p>
+</div>
+
+<div id='not_suported'  style='display: none' >
+	<p>Feature not supported by browser; see<a target='_blank' href='../maps/help.html#terrain_viewer'>help</a> page. 
+	</p>
+</div>
 
 
 

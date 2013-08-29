@@ -199,7 +199,6 @@ function MapColorGUI(mapcolor, ctx){
 
 		canvas_ctx.font = '12px sans-serif';
 
-
 		canvas_ctx.lineWidth =1;
 		var j=0;
 		var color = colors[j];

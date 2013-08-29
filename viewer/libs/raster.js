@@ -1,9 +1,13 @@
 function Raster (data) {
 	this.data = data;
 
+/*
+
+//PLG removed because the min and max are in the GeoJSON file
 	this.computeStats = function () {
 
-		if (this.data.minz !== undefined && this.data.max !== undefined) return;
+
+	if (this.data.minz !== undefined && this.data.max !== undefined) return;
 		
 		var values = data.data;
 
@@ -24,7 +28,7 @@ function Raster (data) {
 	};
 
 	this.computeStats();
-	
+*/	
 }
 
 function downloadFile (url, onload) {
