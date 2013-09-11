@@ -72,18 +72,18 @@
 	
 	function load_raster (raster) {
 		mapcolor = new MapColor(raster,DispMode);
-			mapcolor.setMode2D(true);
-			renderMode();
+		mapcolor.setMode2D(true);
+		renderMode();
 
-			$('#mode').click(function(){ 
-				 mapcolor.toggleMode();
-			}); 
+		$('#mode').click(function(){ 
+			 mapcolor.toggleMode();
+		}); 
 
-			$('#loading').hide(); 
-			$('#content').show(); 
+		$('#loading').hide(); 
+		$('#content').show(); 
 					 
-			mapcolorgui = new MapColorGUI(mapcolor, $('#content_pallet'));
-			mapcolorgui.render();
+		mapcolorgui = new MapColorGUI(mapcolor, $('#content_pallet'));
+		mapcolorgui.render();
 	};
 
 	
@@ -334,42 +334,18 @@
 <div id='mapcolor_gui'>
     <fieldset>
 		<legend>Location</legend>
-		<!-- x:<div id='location_x'></div> -->utm_x:<div id='utm_x'></div><br>
-		<!-- y:<div id='location_y'></div>-->utm_y:<div id='utm_y'></div><br>
-		<!-- z:<div id='location_z'></div>-->elev_z:<div id='elev_z'></div><br>
+		<div style='float: left'>utm_x:</div><div style='float: left' id='utm_x'></div><br>
+		<div style='float: left'>utm_y:</div><div style='float: left' id='utm_y'></div><br>
+		<div style='float: left'>elev_z:</div><div style='float: left' id='elev_z'></div><br>
 	</fieldset>	
 	<button id='mode'></button>
-	
-
-
-	<!-- <fieldset>
-		<legend>Palette</legend>
-		<select id='pallets'></select>
-		<p>Number of colors: <input id='colors' type='text' value='2' style='width: 50px;'/></p> 
-		<div class='container'></div>
-		<canvas id='scale_colors'></canvas>
-		<div style='clear: both'></div>
-		<button id='apply' >Apply</button>
-		
-		<button id='save'>Save</button>
-		<button id='save_as'>Save As</button>
-		<button id='delete'>Delete</button>
-	</fieldset> 
-	
-	<fieldset>
-		<legend>Sun</legend>
-		<p>X angle <input type='number' id='x_angle' value='0' ></input></p>
-		<p>Y angle <input type='number' id='y_angle' value='0' ></input></p>
-		
-		<button id='apply_angles'>Apply Angles</button>
-		<p>Opacity <input id='sun_alpha' ></input></p>
-	</fieldset>-->
 </div>
 <div id="viewport"></div>
 
 
 </div>
 
+<!--
 <div class='help'>
 <form name="vert_exag">
     Display<input type="radio" name="display" id="terrain" onclick='DispMode=1; OpenDEM(fName);' checked="checked"></input>Terrain
@@ -382,6 +358,7 @@
    <input value="California" onclick="fName = 'ca_utm.json.bz2'; OpenDEM(fName);" type="button" ></input>
      Problems consult <a target='_blank' href='help.html'>help page</a>.
 </div>
+-->
 
 <div id='loading'  class='info' >
 			<p style='color:red'>Loading... Patience, may take a while.</p>

@@ -201,22 +201,23 @@ function MapColor(raster,DispMode){
 
 	this.gen = function (raster) {
 		this.sun = new Sun(this);
-    this.loadPallets();
-    this.setPallet(0);
+		this.loadPallets();
+		this.setPallet(0);
 	};
 
-	this.gen_pallet = function(){
+	this.gen_pallet = function() {
+		console.log("gen colors");
 		this.colors = [];
 
-		var min = this.raster.min;
-		var max = this.raster.max;
+		var min = this.raster.data.minz;
+		var max = this.raster.data.maxz;
 		var range = max - min;
 		var colors = parseInt($('#colors').val())-1;
 
 		var step = Math.ceil(range/colors);
 
-		this.setElevationColor(this.raster.min, 0x0);
-		this.setElevationColor(this.raster.max, 0xffffff);
+		this.setElevationColor(min, 0x0);
+		this.setElevationColor(max, 0xffffff);
 
 		if(colors > 1){
 			for(var i=min+step; i<max; i+=step){
