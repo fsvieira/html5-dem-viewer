@@ -178,15 +178,12 @@ function MapColorGUI(mapcolor, ctx){
 
 			// pallets
 			this.render_pallets();
-
-
 		};
-
 
 		container.append(table);
 
 		var canvas = document.getElementById('scale_colors');
-		var sh = container.height();
+		var sh = colors.length*25; // container.height();
 		var sw = 100;
 		canvas.width = sw;
 		canvas.height = sh;

@@ -143,6 +143,7 @@ function View2D(mapcolor){
 	
 	
 	this.paintFaces = function(){
+		console.log("paint");
 		this.paint(); 
 	}; 
 	
