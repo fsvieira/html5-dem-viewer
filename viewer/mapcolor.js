@@ -1,27 +1,38 @@
-function ColorElevation(color, elevation){
+function ColorElevation(color, perc){
 	this.color = color;
-	this.elevation = elevation;
+	this.perc = perc;
 
 	this.setColor = function(val){
 		this.color.setHex(val);
 	};
 
-	this.setElevation = function(val){
-		this.elevation = val;
+	this.setElevation = function (elevation) {
+	  this.perc = (elevation - ColorElevation.min) / (ColorElevation.max - ColorElevation.min)
+	  return this;
 	};
 
-	ColorElevation.sortByElevation = function(a, b){
-		return a.elevation-b.elevation;
+	this.getElevation = function () {
+		return ColorElevation.min + (ColorElevation.max - ColorElevation.min) * this.perc;
 	};
+
 };
+
+ColorElevation.sortByElevation = function (a, b){
+	return a.getElevation() - b.getElevation();
+};
+
+ColorElevation.minMax = function (min, max) {
+	ColorElevation.min = min;
+	ColorElevation.max = max;
+};
+
 
 function MapPallet(name, colors){
 	this.name = name;
 	this.colors = colors ? colors : [];
 };
 
-function MapColor(raster,DispMode){
-
+function MapColor(raster){
 	this.colors = [];
 	this.pallets = [];
 	this.selected_pallet = 0;
@@ -30,9 +41,11 @@ function MapColor(raster,DispMode){
 
 	this.view = null;
 	this.sun = null;
-    this.DispMode = DispMode;
 
 	this.elevations = raster.data.data;
+	
+	ColorElevation.minMax(raster.data.minz, raster.data.maxz);
+	
 	this.mode_area = false;
 
 	this.set3DArea = function(x, y){
@@ -95,8 +108,6 @@ function MapColor(raster,DispMode){
 				$('#select3d').show();
 			}
 		}
-
-
 	};
 
 	this.toggleMode = function(){
@@ -118,7 +129,6 @@ function MapColor(raster,DispMode){
 	};
 
 	this.setElevationColor = function(elevation, hex){
-
 		var index =0, color;
 		for(var i=0; i< this.colors.length; i++){
 			color = this.colors[i];
@@ -134,9 +144,8 @@ function MapColor(raster,DispMode){
 
 		}
 
-
 		// set new color
-		this.colors.push(new ColorElevation(new THREE.Color(hex), elevation));
+		this.colors.push(new ColorElevation(new THREE.Color(hex)).setElevation(elevation));
 
 		// Sort colors.
 		this.colors.sort(ColorElevation.sortByElevation);
@@ -149,7 +158,7 @@ function MapColor(raster,DispMode){
 
 	this.getColorIndex = function(elevation){
 		for(var i=0; i< this.colors.length; i++){
-			if(elevation < this.colors[i].elevation){
+			if(elevation < this.colors[i].getElevation()){
 				if(i != 0){
 					return i-1;
 				}
@@ -162,7 +171,7 @@ function MapColor(raster,DispMode){
 
 	this.getElevationColor = function(elevation){
 
-		var e = this.colors[this.colors.length-1].elevation;
+		var e = this.colors[this.colors.length-1].getElevation();
 		if(elevation > e){
 			elevation = elevation % e;
 		}
@@ -180,7 +189,7 @@ function MapColor(raster,DispMode){
 		var c_min = min_color.color;
 
 
-		e = (elevation - min_color.elevation)/(max_color.elevation - min_color.elevation);
+		e = (elevation - min_color.getElevation()) / (max_color.getElevation() - min_color.getElevation());
 
 		var vr = c_max.r-c_min.r;
 		var vg = c_max.g-c_min.g;
@@ -197,12 +206,32 @@ function MapColor(raster,DispMode){
 
 	};
 
+	$('#clear_pallets').click(function () {
+		delete localStorage['pallets'];
+	});
 
+	$('#clear_local_data').click(function () {
+		delete localStorage['version'];
+		delete localStorage['pallets'];
+	});
+	
+	this.update_pallets = function () {
+		var pallets = localStorage['pallets'];
+		if (pallets) {
+			localStorage['pallets'] = JSON.stringify(this.pallets);
+			$("#pallets_export_ui").show();
+			$("#pallets_export").html(pallets);
+		}
+		else {
+			$("#pallets_export_ui").hide();
+		}
+	};
 
 	this.gen = function (raster) {
 		this.sun = new Sun(this);
 		this.loadPallets();
 		this.setPallet(0);
+		this.update_pallets();
 	};
 
 	this.gen_pallet = function() {
@@ -229,13 +258,11 @@ function MapColor(raster,DispMode){
 
 	this.setPallet = function(i){
 		this.selected_pallet = i;
-		delete this.colors;
 		this.colors = [];
 		var colors = this.pallets[i].colors;
 		for(i in colors){
-			this.setElevationColor(colors[i].elevation, colors[i].color.getHex());
+			this.setElevationColor(colors[i].getElevation(), colors[i].color.getHex());
 		}
-
 	};
 
 	this.deletePallet = function(index){
@@ -244,10 +271,11 @@ function MapColor(raster,DispMode){
 		if(this.pallets.length > 0){
 			this.setPallet(this.pallets.length-1);
 		}
-		localStorage['pallets'] = JSON.stringify(this.pallets);
+		// localStorage['pallets'] = JSON.stringify(this.pallets);
+		this.update_pallets(pallets);
 	};
 
-	this.savePallet = function(name){
+	this.savePallet = function(name) {
 		var n;
 		var ins= true;
 		for(n in this.pallets){
@@ -266,8 +294,8 @@ function MapColor(raster,DispMode){
 			this.setPallet(n);
 		}
 
-		// alert(JSON.stringify(this.pallets));
-		localStorage['pallets'] = JSON.stringify(this.pallets);
+		this.update_pallets(this.pallets);
+		// localStorage['pallets'] = JSON.stringify(this.pallets);
 	};
 
 	this.loadColor= function(colors){
@@ -286,15 +314,26 @@ function MapColor(raster,DispMode){
 	this.loadPallets = function(){
 		var loaded = [];
 		this.pallets = [];
+	
+		if (!localStorage['version']) {
+			localStorage['version'] = "v0.0.0";
+			// delete all pallets:
+			delete localStorage['pallets'];
+		}
+		
 		if(localStorage['pallets']){
 			var p = JSON.parse(localStorage['pallets']);
 			this.loadPalletsJSON(p, loaded);
 		}
 		
 		this.loadPalletsJSON(
-			[{"name":"black-white","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":1,"g":1,"b":1},"elevation":255}]},{"name":"pallet_1","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":0.10196078431372549,"g":0,"b":1},"elevation":20},{"color":{"r":1,"g":0,"b":0},"elevation":40},{"color":{"r":1,"g":1,"b":1},"elevation":60},{"color":{"r":1,"g":0.9019607843137255,"b":0},"elevation":80}]},{"name":"pallet_2","colors":[{"color":{"r":1,"g":1,"b":1},"elevation":0},{"color":{"r":0.03529411764705882,"g":0,"b":1},"elevation":10},{"color":{"r":0.21568627450980393,"g":1,"b":0},"elevation":20},{"color":{"r":1,"g":0.9490196078431372,"b":0},"elevation":30},{"color":{"r":1,"g":0,"b":0},"elevation":40},{"color":{"r":1,"g":1,"b":1},"elevation":50}]}
-				,{"name":"pallet_3","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":0.10196078431372549,"g":0,"b":1},"elevation":63},{"color":{"r":1,"g":0,"b":0},"elevation":126},{"color":{"r":1,"g":0.9019607843137255,"b":0},"elevation":189},{"color":{"r":1,"g":1,"b":1},"elevation":255}]},{"name":"pallet_4","colors":[{"color":{"r":1,"g":1,"b":1},"elevation":0},{"color":{"r":0.03529411764705882,"g":0,"b":1},"elevation":50},{"color":{"r":0.21568627450980393,"g":1,"b":0},"elevation":100},{"color":{"r":1,"g":0.9490196078431372,"b":0},"elevation":150},{"color":{"r":1,"g":0,"b":0},"elevation":200},{"color":{"r":1,"g":1,"b":1},"elevation":255}]}
-			]
+			[{
+				"name":"black-white",
+				"colors":[
+					{"color":{"r":0,"g":0,"b":0},"elevation":0},
+					{"color":{"r":1,"g":1,"b":1},"elevation":1}
+				]
+			}]
 			, loaded
 		);
 	};

@@ -71,7 +71,7 @@
 	
 	
 	function load_raster (raster) {
-		mapcolor = new MapColor(raster,DispMode);
+		mapcolor = new MapColor(raster);
 		mapcolor.setMode2D(true);
 		renderMode();
 
@@ -113,6 +113,7 @@
 					{ classes: 'menu_icon_info', content: 'content_info' },
 					{ classes: 'menu_icon_pallet', content: 'content_pallet' },
 					{ classes: 'menu_icon_sun', content: 'content_sun' },
+					{ classes: 'menu_icon_settings', content: 'content_settings' },
 					{ classes: 'menu_icon_help', content: 'content_help' },
 				]
 			});
@@ -184,8 +185,32 @@
 				<button id='apply_angles'>Apply Angles</button>
 				<p>Opacity <input id='sun_alpha' ></input></p>
 		</fieldset>
+		<button onclick='$(".menu_content").hide()'>Close</button>
+	</div>
 	
-			<button onclick='$(".menu_content").hide()'>Close</button>	
+	<div class='menu_panel' id='content_settings'>
+		<p>Settings</p>
+		<button id='clear_local_data'>Clear Local Data</button>
+		<fieldset>
+			<legend>Pallets</legend>
+			<button id='clear_pallets'>Clear Pallets</button>
+			<div id='pallets_export_ui'>
+				<p>Copy the pallet text bellow to export to other browser.</p>
+				<textarea style='width: 100%' id='pallets_export'></textarea>
+			</div>
+			<p>Paste pallet text in the box bellow to import pallets to this browser.</p>
+			<textarea style='width: 100%' id='pallets_import'></textarea>
+		</fieldset>
+		<!-- TODO: setup layout save it to local storage.
+		<fieldset>
+			<legend>Layout</legend>
+			<select>
+				<option value='orange'>Orange</option>
+				<option value='black'>Black</option>
+			</select>
+		</fieldset>
+		-->
+		<button onclick='$(".menu_content").hide()'>Close</button>	
 	</div>
 	
 	<div class='menu_panel' id='content_help'>
@@ -344,21 +369,6 @@
 
 
 </div>
-
-<!--
-<div class='help'>
-<form name="vert_exag">
-    Display<input type="radio" name="display" id="terrain" onclick='DispMode=1; OpenDEM(fName);' checked="checked"></input>Terrain
-	<input type="radio" name="display" id="gold" onclick='DispMode=2; OpenDEM(fName);' ></input>Gold
-    <input type="radio" name="display" id="defined" onclick='DispMode=3; OpenDEM(fName);'></input>Defined
-</form>  
- 	
-   <input value="Death Valley" onclick="fName = 'dv_utm.json.bz2'; OpenDEM(fName); " type="button" ></input>
-   <input value="Duck" onclick="fName = 'duck.json.bz2'; OpenDEM(fName);"  type="button" ></input>
-   <input value="California" onclick="fName = 'ca_utm.json.bz2'; OpenDEM(fName);" type="button" ></input>
-     Problems consult <a target='_blank' href='help.html'>help page</a>.
-</div>
--->
 
 <div id='loading'  class='info' >
 			<p style='color:red'>Loading... Patience, may take a while.</p>

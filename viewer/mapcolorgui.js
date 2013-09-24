@@ -146,7 +146,7 @@ function MapColorGUI(mapcolor, ctx){
 			var color = colors[i];
 
 			var tr = $("<tr>");
-			var input_elevation = $('<input type="text" value="'+color.elevation+'">');
+			var input_elevation = $('<input type="text" value="'+color.getElevation()+'">');
 			input_elevation.width(50);
 
 			input_elevation.change(
@@ -169,7 +169,7 @@ function MapColorGUI(mapcolor, ctx){
 					letterCase: 'uppercase',
 					change: function(hex, rgb) {
 							this.mapcolorgui.mapcolor.setElevationColor(this.elevation, parseInt("0x"+ hex.substring(1)) );
-						}.bind({'elevation': color.elevation, 'mapcolorgui': this})
+						}.bind({'elevation': color.getElevation(), 'mapcolorgui': this})
 			});
 
 			tr.append(td_value);
@@ -201,8 +201,8 @@ function MapColorGUI(mapcolor, ctx){
 		var color = colors[j];
 		var px = 0;
 
-		var min = colors[0].elevation;
-		var max = colors[colors.length-1].elevation;
+		var min = colors[0].getElevation();
+		var max = colors[colors.length-1].getElevation();
 		var range = max - min;
 		var step = range/(sh-10);
 
@@ -219,12 +219,12 @@ function MapColorGUI(mapcolor, ctx){
 				canvas_ctx.lineTo(30,sh-i);
 				canvas_ctx.stroke();
 				px++;
-				if(color.elevation <= e ){
+				if(color.getElevation() <= e ){
 					canvas_ctx.strokeStyle = "#000000";
 					if(px < 10){
-						canvas_ctx.strokeText('-------- '+ color.elevation, 35, sh-i);
+						canvas_ctx.strokeText('-------- '+ color.getElevation(), 35, sh-i);
 					}else{
-						canvas_ctx.strokeText('- '+ color.elevation, 35, sh-i);
+						canvas_ctx.strokeText('- '+ color.getElevation(), 35, sh-i);
 					}
 					j++;
 					color = colors[j];

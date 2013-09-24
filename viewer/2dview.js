@@ -51,17 +51,6 @@ function View2D(mapcolor){
 			$('#elev_z').html(zs);
 			
 		}
-		/*if ( (location_x < w) && (location_y < h) ) {
-		  var xutm = this.mapcolor.raster.data.llx + location_x * this.mapcolor.raster.data.dx;
-			var xs = 'px: ' + location_x + '   utm_x:  ' + Math.floor(xutm + 0.5);
-			$("#location_x").html(xs);
-			var yutm = this.mapcolor.raster.data.lly + (this.mapcolor.raster.data.h - location_y) * this.mapcolor.raster.data.dy;
-			var ys = 'py: ' + location_y + '   utm_y:  ' + Math.floor(yutm + 0.5);
-     		$("#location_y").html(ys);
-			var z = this.mapcolor.elevations[(location_y * this.mapcolor.raster.data.w) + location_x];
-			var zs = 'elev: ' + z;
-			$("#location_z").html(zs);
-		}*/
 		
 		$('#select3d').css({'left': x, 'top': y}); 
 	}.bind(this)); 

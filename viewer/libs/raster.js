@@ -44,14 +44,14 @@ function downloadFile (url, onload) {
 };
 
 Raster.load_json_bz2 = function (bytes, onload, onerror) {
-	try {
+	// try {
 		var data = bzip2.simple(bzip2.array(bytes));
 		var raster = new Raster(JSON.parse(data));
 		onload(raster);
-	}
+	/* }
 	catch (exception) {
 		onerror(exception);
-	}				
+	}*/				
 };
 
 Raster.load_png = function(url, onload, onerror, divider) {
