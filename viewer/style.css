@@ -233,6 +233,7 @@ a:hover {text-decoration: underline; 'color': green; }
 	opacity: 0.8;
 	max-height: 550px;
 	overflow: auto;
+	z-index: 100;
 }
 
 
