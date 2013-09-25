@@ -118,6 +118,29 @@ function MapColorGUI(mapcolor, ctx){
 		}.bind(this)
 	);
 
+	$('#pallets_import').change(function () {
+		try {
+			var pallets = JSON.parse($('#pallets_import').val());
+		}
+		catch (e) {
+			alert("Invalid pallet!");
+			return;
+		}
+		this.mapcolor.addPallets(pallets, "imported");
+		this.render_pallets();
+	}.bind(this));
+
+	$('#clear_pallets').click(function () {
+		delete localStorage['pallets'];
+		$("#pallets_export_ui").hide();
+		this.render_pallets();
+	}.bind(this));
+
+	$('#clear_local_data').click(function () {
+		delete localStorage['version'];
+		delete localStorage['pallets'];
+	});
+
 	this.render_pallets = function(){
 		var select_pallets = $('#pallets');
 		select_pallets.html("");
@@ -146,7 +169,7 @@ function MapColorGUI(mapcolor, ctx){
 			var color = colors[i];
 
 			var tr = $("<tr>");
-			var input_elevation = $('<input type="text" value="'+color.elevation+'">');
+			var input_elevation = $('<input type="text" value="'+color.getElevation()+'">');
 			input_elevation.width(50);
 
 			input_elevation.change(
@@ -162,14 +185,13 @@ function MapColorGUI(mapcolor, ctx){
 			td_value.append(input_elevation);
 			var td_color = $("<td></td>");
 
-			// alert(pad(color.color.getHex().toString(16), 6, "0"));
 			var color_p = $('<input type="hidden" name="color'+i+'" class="color-picker" size="6" autocomplete="on" maxlength="10" value="#' + pad(color.color.getHex().toString(16), 6, "0") +'" />');
 			td_color.append(color_p);
 			color_p.miniColors({
 					letterCase: 'uppercase',
 					change: function(hex, rgb) {
 							this.mapcolorgui.mapcolor.setElevationColor(this.elevation, parseInt("0x"+ hex.substring(1)) );
-						}.bind({'elevation': color.elevation, 'mapcolorgui': this})
+						}.bind({'elevation': color.getElevation(), 'mapcolorgui': this})
 			});
 
 			tr.append(td_value);
@@ -183,7 +205,7 @@ function MapColorGUI(mapcolor, ctx){
 		container.append(table);
 
 		var canvas = document.getElementById('scale_colors');
-		var sh = colors.length*25; // container.height();
+		var sh = colors.length*25;
 		var sw = 100;
 		canvas.width = sw;
 		canvas.height = sh;
@@ -201,8 +223,8 @@ function MapColorGUI(mapcolor, ctx){
 		var color = colors[j];
 		var px = 0;
 
-		var min = colors[0].elevation;
-		var max = colors[colors.length-1].elevation;
+		var min = colors[0].getElevation();
+		var max = colors[colors.length-1].getElevation();
 		var range = max - min;
 		var step = range/(sh-10);
 
@@ -213,18 +235,18 @@ function MapColorGUI(mapcolor, ctx){
 				var g = Math.floor(c.g*255);
 				var b = Math.floor(c.b*255);
 
-				canvas_ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")"; // .toString(16);
+				canvas_ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
 				canvas_ctx.beginPath();
 				canvas_ctx.moveTo(0,sh-i);
 				canvas_ctx.lineTo(30,sh-i);
 				canvas_ctx.stroke();
 				px++;
-				if(color.elevation <= e ){
+				if(color.getElevation() <= e ){
 					canvas_ctx.strokeStyle = "#000000";
 					if(px < 10){
-						canvas_ctx.strokeText('-------- '+ color.elevation, 35, sh-i);
+						canvas_ctx.strokeText('-------- '+ color.getElevation(), 35, sh-i);
 					}else{
-						canvas_ctx.strokeText('- '+ color.elevation, 35, sh-i);
+						canvas_ctx.strokeText('- '+ color.getElevation(), 35, sh-i);
 					}
 					j++;
 					color = colors[j];

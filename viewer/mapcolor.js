@@ -6,22 +6,33 @@ function ColorElevation(color, elevation){
 		this.color.setHex(val);
 	};
 
-	this.setElevation = function(val){
-		this.elevation = val;
+	this.setElevation = function (elevation) {
+	  this.elevation = (elevation - ColorElevation.min) / (ColorElevation.max - ColorElevation.min)
+	  return this;
 	};
 
-	ColorElevation.sortByElevation = function(a, b){
-		return a.elevation-b.elevation;
+	this.getElevation = function () {
+		return ColorElevation.min + (ColorElevation.max - ColorElevation.min) * this.elevation;
 	};
+
 };
+
+ColorElevation.sortByElevation = function (a, b){
+	return a.getElevation() - b.getElevation();
+};
+
+ColorElevation.minMax = function (min, max) {
+	ColorElevation.min = min;
+	ColorElevation.max = max;
+};
+
 
 function MapPallet(name, colors){
 	this.name = name;
 	this.colors = colors ? colors : [];
 };
 
-function MapColor(raster,DispMode){
-
+function MapColor(raster){
 	this.colors = [];
 	this.pallets = [];
 	this.selected_pallet = 0;
@@ -30,9 +41,11 @@ function MapColor(raster,DispMode){
 
 	this.view = null;
 	this.sun = null;
-    this.DispMode = DispMode;
 
 	this.elevations = raster.data.data;
+	
+	ColorElevation.minMax(raster.data.minz, raster.data.maxz);
+	
 	this.mode_area = false;
 
 	this.set3DArea = function(x, y){
@@ -69,7 +82,7 @@ function MapColor(raster,DispMode){
 
 	this.setMode2D = function(mode){
 
-	  this.mode_2d = mode;
+		this.mode_2d = mode;
 
 		if(this.mode_2d){
 			if(this.view){
@@ -90,21 +103,24 @@ function MapColor(raster,DispMode){
 				this.view.setWH(this.raster.data.w, this.raster.data.h);
 				this.view.paint();
 			}else{
-				this.mode_2d = true;
 				this.mode_area = true;
 				$('#select3d').show();
 			}
 		}
-
-
+		
+		if (this.mode_2d) {
+		   $('#mode').html('Switch to 3D Mode');
+		   $(".coords").show();
+		} else {
+		   $('#mode').html('Switch to 2D Mode');
+		   $(".coords").hide();
+		}
 	};
 
 	this.toggleMode = function(){
 		$('#loading').show("fast", function(){
-				this.mode_2d = !this.mode_2d;
-				this.setMode2D(this.mode_2d);
+				this.setMode2D(!this.mode_2d);
 				$('#loading').hide();
-				renderMode();
 			}.bind(this)
 		);
 	};
@@ -118,25 +134,23 @@ function MapColor(raster,DispMode){
 	};
 
 	this.setElevationColor = function(elevation, hex){
-
 		var index =0, color;
 		for(var i=0; i< this.colors.length; i++){
 			color = this.colors[i];
 			index = i;
-			if(elevation == color.elevation){
+			if(elevation == color.getElevation()){
 				color.setColor(hex);
 				return;
 			}
 
-			if(elevation < color.elevation){
+			if(elevation < color.getElevation()){
 				break;
 			}
 
 		}
 
-
 		// set new color
-		this.colors.push(new ColorElevation(new THREE.Color(hex), elevation));
+		this.colors.push(new ColorElevation(new THREE.Color(hex)).setElevation(elevation));
 
 		// Sort colors.
 		this.colors.sort(ColorElevation.sortByElevation);
@@ -149,7 +163,7 @@ function MapColor(raster,DispMode){
 
 	this.getColorIndex = function(elevation){
 		for(var i=0; i< this.colors.length; i++){
-			if(elevation < this.colors[i].elevation){
+			if(elevation < this.colors[i].getElevation()){
 				if(i != 0){
 					return i-1;
 				}
@@ -162,8 +176,8 @@ function MapColor(raster,DispMode){
 
 	this.getElevationColor = function(elevation){
 
-		var e = this.colors[this.colors.length-1].elevation;
-		if(elevation > e){
+		var e = this.colors[this.colors.length-1].getElevation();
+		if(elevation > e) {
 			elevation = elevation % e;
 		}
 
@@ -174,13 +188,11 @@ function MapColor(raster,DispMode){
 			return min_color.color;
 		}
 
-
 		var max_color = this.colors[i+1];
 		var c_max = max_color.color;
 		var c_min = min_color.color;
 
-
-		e = (elevation - min_color.elevation)/(max_color.elevation - min_color.elevation);
+		e = (elevation - min_color.getElevation()) / (max_color.getElevation() - min_color.getElevation());
 
 		var vr = c_max.r-c_min.r;
 		var vg = c_max.g-c_min.g;
@@ -193,20 +205,30 @@ function MapColor(raster,DispMode){
          
   
 		return new THREE.Color().setRGB(c_r, c_g, c_b);
-
-
 	};
 
-
+	
+	
+	this.update_pallets = function () {
+		if (this.pallets) {
+			var pallets_str = JSON.stringify(this.pallets)
+			localStorage['pallets'] = pallets_str;
+			$("#pallets_export").html(pallets_str);
+			$("#pallets_export_ui").show();
+		}
+		else {
+			$("#pallets_export_ui").hide();
+		}
+	};
 
 	this.gen = function (raster) {
 		this.sun = new Sun(this);
 		this.loadPallets();
 		this.setPallet(0);
+		this.update_pallets();
 	};
 
 	this.gen_pallet = function() {
-		console.log("gen colors");
 		this.colors = [];
 
 		var min = this.raster.data.minz;
@@ -215,11 +237,11 @@ function MapColor(raster,DispMode){
 		var colors = parseInt($('#colors').val())-1;
 
 		var step = Math.ceil(range/colors);
-
-		this.setElevationColor(min, 0x0);
+		
+		this.setElevationColor(min, 0xff);
 		this.setElevationColor(max, 0xffffff);
-
-		if(colors > 1){
+		
+		if (colors > 1) {
 			for(var i=min+step; i<max; i+=step){
 				var c = this.getElevationColor(i);
 				this.setElevationColor(i, c.getHex());
@@ -229,13 +251,11 @@ function MapColor(raster,DispMode){
 
 	this.setPallet = function(i){
 		this.selected_pallet = i;
-		delete this.colors;
 		this.colors = [];
 		var colors = this.pallets[i].colors;
 		for(i in colors){
-			this.setElevationColor(colors[i].elevation, colors[i].color.getHex());
+			this.setElevationColor(colors[i].getElevation(), colors[i].color.getHex());
 		}
-
 	};
 
 	this.deletePallet = function(index){
@@ -244,10 +264,10 @@ function MapColor(raster,DispMode){
 		if(this.pallets.length > 0){
 			this.setPallet(this.pallets.length-1);
 		}
-		localStorage['pallets'] = JSON.stringify(this.pallets);
+		this.update_pallets(pallets);
 	};
 
-	this.savePallet = function(name){
+	this.savePallet = function(name) {
 		var n;
 		var ins= true;
 		for(n in this.pallets){
@@ -266,8 +286,7 @@ function MapColor(raster,DispMode){
 			this.setPallet(n);
 		}
 
-		// alert(JSON.stringify(this.pallets));
-		localStorage['pallets'] = JSON.stringify(this.pallets);
+		this.update_pallets(this.pallets);
 	};
 
 	this.loadColor= function(colors){
@@ -282,29 +301,68 @@ function MapColor(raster,DispMode){
 
 		this.pallets.push(new MapPallet(colors['name'], ncolors));
 	};
+	
+	this.addPallets = function (pallets, prefix) {
+		for (i in pallets) {
+			pallets[i].name = "(" + prefix + ") "+ pallets[i].name; 
+		}
+		
+		this.loadPalletsJSON(pallets);
+		this.update_pallets();
+	};
 
-	this.loadPallets = function(){
+	this.loadPallets = function () {
 		var loaded = [];
 		this.pallets = [];
-		if(localStorage['pallets']){
-			var p = JSON.parse(localStorage['pallets']);
-			this.loadPalletsJSON(p, loaded);
+	
+		if (!localStorage['version']) {
+			localStorage['version'] = "v0.0.0";
+			// delete all pallets:
+			delete localStorage['pallets'];
+		}
+		
+		if(localStorage['pallets']) {
+			try {
+				var p = JSON.parse(localStorage['pallets']);
+				this.loadPalletsJSON(p, loaded);
+			}
+			catch (e) {
+				// pallets are correpted, delete everything.
+				delete localStorage['pallets'];
+			}
 		}
 		
 		this.loadPalletsJSON(
-			[{"name":"black-white","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":1,"g":1,"b":1},"elevation":255}]},{"name":"pallet_1","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":0.10196078431372549,"g":0,"b":1},"elevation":20},{"color":{"r":1,"g":0,"b":0},"elevation":40},{"color":{"r":1,"g":1,"b":1},"elevation":60},{"color":{"r":1,"g":0.9019607843137255,"b":0},"elevation":80}]},{"name":"pallet_2","colors":[{"color":{"r":1,"g":1,"b":1},"elevation":0},{"color":{"r":0.03529411764705882,"g":0,"b":1},"elevation":10},{"color":{"r":0.21568627450980393,"g":1,"b":0},"elevation":20},{"color":{"r":1,"g":0.9490196078431372,"b":0},"elevation":30},{"color":{"r":1,"g":0,"b":0},"elevation":40},{"color":{"r":1,"g":1,"b":1},"elevation":50}]}
-				,{"name":"pallet_3","colors":[{"color":{"r":0,"g":0,"b":0},"elevation":0},{"color":{"r":0.10196078431372549,"g":0,"b":1},"elevation":63},{"color":{"r":1,"g":0,"b":0},"elevation":126},{"color":{"r":1,"g":0.9019607843137255,"b":0},"elevation":189},{"color":{"r":1,"g":1,"b":1},"elevation":255}]},{"name":"pallet_4","colors":[{"color":{"r":1,"g":1,"b":1},"elevation":0},{"color":{"r":0.03529411764705882,"g":0,"b":1},"elevation":50},{"color":{"r":0.21568627450980393,"g":1,"b":0},"elevation":100},{"color":{"r":1,"g":0.9490196078431372,"b":0},"elevation":150},{"color":{"r":1,"g":0,"b":0},"elevation":200},{"color":{"r":1,"g":1,"b":1},"elevation":255}]}
-			]
+			[
+			{	
+				"name":"colors",
+				"colors":[
+					{"color":{"r":0,"g":0,"b":1},"elevation":0},
+					{"color":{"r":0.08235294117647059,"g":1,"b":0},"elevation":0.2545454545454545},
+					{"color":{"r":1,"g":0,"b":0},"elevation":0.509090909090909},
+					{"color":{"r":1,"g":0,"b":0.8},"elevation":0.7636363636363637},
+					{"color":{"r":1,"g":1,"b":1},"elevation":1}
+				]
+			},
+			{
+				"name":"black-white",
+				"colors":[
+					{"color":{"r":0,"g":0,"b":0},"elevation":0},
+					{"color":{"r":1,"g":1,"b":1},"elevation":1}
+				]
+			}]
 			, loaded
 		);
 	};
 
 	this.loadPalletsJSON = function(p, loaded){
-		var c;
-		for(c in p){
-			if(loaded.indexOf(p[c].name) == -1 ){
-				this.loadColor(p[c]);
-				loaded.push(p[c].name);
+		if (p) {
+			var c;
+			for(c in p){
+				if(!loaded || loaded.indexOf(p[c].name) == -1 ){
+					this.loadColor(p[c]);
+					loaded && loaded.push(p[c].name);
+				}
 			}
 		}
 	};

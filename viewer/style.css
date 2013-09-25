@@ -214,6 +214,12 @@ a:hover {text-decoration: underline; 'color': green; }
 	width: 48px;
 }
 
+#menu .menu_icon_settings {
+	background-image: url('images/settings48x48.png');
+	height: 48px;
+	width: 48px;
+}
+
 .menu_content {
 	left: 58px;
 	top: 0;
@@ -227,7 +233,15 @@ a:hover {text-decoration: underline; 'color': green; }
 	opacity: 0.8;
 	max-height: 550px;
 	overflow: auto;
+	z-index: 100;
 }
 
+
+#coords {
+	position: fixed;
+	background-color: black;
+	padding: 5px;
+	color: white;
+}
 
 
