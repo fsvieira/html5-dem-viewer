@@ -41,16 +41,6 @@
 	var img; 
 	var DispMode=1;
 	var fName; 
-		
-	function renderMode(mode){
-		if(mapcolor.mode_2d){
-		   $('#mode').html('Switch to 3D Mode');
-		}else{
-		   $('#mode').html('Switch to 2D Mode');
-		   $("#location_x").html('');
-		   $("#location_y").html('');
-		}
-	}; 
 	
 	function isCanvasSupported(){
 		var elem = document.createElement('canvas');
@@ -73,7 +63,6 @@
 	function load_raster (raster) {
 		mapcolor = new MapColor(raster);
 		mapcolor.setMode2D(true);
-		renderMode();
 
 		$('#mode').click(function(){ 
 			 mapcolor.toggleMode();
@@ -196,7 +185,7 @@
 			<button id='clear_pallets'>Clear Pallets</button>
 			<div id='pallets_export_ui'>
 				<p>Copy the pallet text bellow to export to other browser.</p>
-				<textarea style='width: 100%' id='pallets_export'></textarea>
+				<textarea readonly style='width: 100%' id='pallets_export'></textarea>
 			</div>
 			<p>Paste pallet text in the box bellow to import pallets to this browser.</p>
 			<textarea style='width: 100%' id='pallets_import'></textarea>
@@ -356,13 +345,12 @@
 	</div>
 </div>
 
-<div id='mapcolor_gui'>
-    <fieldset>
-		<legend>Location</legend>
-		<div style='float: left'>utm_x:</div><div style='float: left' id='utm_x'></div><br>
-		<div style='float: left'>utm_y:</div><div style='float: left' id='utm_y'></div><br>
-		<div style='float: left'>elev_z:</div><div style='float: left' id='elev_z'></div><br>
-	</fieldset>	
+<div id='coords'>
+	<div class='coords'>
+		<div style='float: left'>lon:&nbsp;</div><div style='float: left' id='utm_x'></div>
+		<div style='float: left'>, lat:&nbsp;</div><div style='float: left' id='utm_y'></div> 
+		<div style='float: left'>, alt:&nbsp;</div><div style='float: left' id='elev_z'></div>
+	</div>
 	<button id='mode'></button>
 </div>
 <div id="viewport"></div>

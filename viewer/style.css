@@ -236,4 +236,11 @@ a:hover {text-decoration: underline; 'color': green; }
 }
 
 
+#coords {
+	position: fixed;
+	background-color: black;
+	padding: 5px;
+	color: white;
+}
+
 

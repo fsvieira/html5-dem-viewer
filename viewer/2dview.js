@@ -3,6 +3,17 @@ function View2D(mapcolor){
 	
 	var w = window.innerWidth; 
 	var h = window.innerHeight;
+	
+	function setup_coords() {
+		var w = window.innerWidth; 
+		var h = window.innerHeight;
+		var coords = $("#coords");
+		 
+		coords.css({left: (w/2) - (coords.width()/2) }); 
+	}
+	setup_coords();
+	
+	$(window).resize(setup_coords);
 		
 	$("#viewport").html("<div id='select3d'><div class='text'>The image is to big, please select a small area. Click when ready.</div></div>"); 	
 	$("#viewport").append(this.mapcolor.sun.canvas); 
@@ -97,8 +108,8 @@ function View2D(mapcolor){
 	}; 
 	
 	
-	this.paintFaces = function(){
-		this.paint(); 
+	this.paintFaces = function() {
+		this.paint();
 	}; 
 	
 	this.free = function(){

@@ -118,6 +118,29 @@ function MapColorGUI(mapcolor, ctx){
 		}.bind(this)
 	);
 
+	$('#pallets_import').change(function () {
+		try {
+			var pallets = JSON.parse($('#pallets_import').val());
+		}
+		catch (e) {
+			alert("Invalid pallet!");
+			return;
+		}
+		this.mapcolor.addPallets(pallets, "imported");
+		this.render_pallets();
+	}.bind(this));
+
+	$('#clear_pallets').click(function () {
+		delete localStorage['pallets'];
+		$("#pallets_export_ui").hide();
+		this.render_pallets();
+	}.bind(this));
+
+	$('#clear_local_data').click(function () {
+		delete localStorage['version'];
+		delete localStorage['pallets'];
+	});
+
 	this.render_pallets = function(){
 		var select_pallets = $('#pallets');
 		select_pallets.html("");
@@ -162,7 +185,6 @@ function MapColorGUI(mapcolor, ctx){
 			td_value.append(input_elevation);
 			var td_color = $("<td></td>");
 
-			// alert(pad(color.color.getHex().toString(16), 6, "0"));
 			var color_p = $('<input type="hidden" name="color'+i+'" class="color-picker" size="6" autocomplete="on" maxlength="10" value="#' + pad(color.color.getHex().toString(16), 6, "0") +'" />');
 			td_color.append(color_p);
 			color_p.miniColors({
@@ -183,7 +205,7 @@ function MapColorGUI(mapcolor, ctx){
 		container.append(table);
 
 		var canvas = document.getElementById('scale_colors');
-		var sh = colors.length*25; // container.height();
+		var sh = colors.length*25;
 		var sw = 100;
 		canvas.width = sw;
 		canvas.height = sh;
@@ -213,7 +235,7 @@ function MapColorGUI(mapcolor, ctx){
 				var g = Math.floor(c.g*255);
 				var b = Math.floor(c.b*255);
 
-				canvas_ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")"; // .toString(16);
+				canvas_ctx.strokeStyle = "rgb(" + r + "," + g + "," + b + ")";
 				canvas_ctx.beginPath();
 				canvas_ctx.moveTo(0,sh-i);
 				canvas_ctx.lineTo(30,sh-i);
