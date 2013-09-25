@@ -10,5 +10,7 @@ Features:
    - Pallet Management (create, edit, save (as), delete).
    - Default Pallets.
    - Cyclic pallets support.
+   - Import/Export Pallets.
+   - All pallets work with any map (elevation is saved as percentage).
  
  
